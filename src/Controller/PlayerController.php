@@ -59,7 +59,7 @@ class PlayerController extends AbstractController
     #[Route('/player/edit/{id}', name: 'app_player_edit_form', methods: ['GET'])]
     public function update_form(EntityManagerInterface $entityManager, int $id){
         $player = $entityManager->getRepository(Player::class)->find($id);
-        return $this->render('player/index.html.twig', ['players' => $players]);
+        return $this->render('player/index.html.twig', ['player' => $player]);
     }
     #[Route('/player/edit/{id}', name: 'app_player_edit',methods: ['POST'])]
     public function update(Request $request,EntityManagerInterface $entityManager, int $id){
