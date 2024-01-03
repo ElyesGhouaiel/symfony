@@ -34,10 +34,29 @@ class PlayerController extends AbstractController
     }
 
     #[Route('/player/show/{id}', name: 'app_player_show')]
-    public function show(Player $player){
+    public function show(Player $player,EntityManagerInterface $entityManager){
+        $players = $entityManager->getRepository(Player::class)->findAll();
         return $this->render('player/index2.html.twig', [
-            'player' => $player,
+            'player' => $player,'players' => $players,
         ]);
+    }
+    #[Route('/player/show/{id}', name: 'app_player_attack_form', methods: ['GET'])]
+    public function attack_form(EntityManagerInterface $entityManager, int $id){
+        $player = $entityManager->getRepository(Player::class)->find($id);
+        return $this->render('player/index2.html.twig', ['player' => $player]);
+    }
+    #[Route('/player/edit/{id}', name: 'app_player_attack',methods: ['POST'])]
+    public function attack(Request $request,EntityManagerInterface $entityManager, int $id){
+
+        $player = $entityManager->getRepository(Player::class)->find($id);
+        $player->setName($request->request->get('name'));
+        $player->setAd($request->request->get('ad'));
+        $player->setAp($request->request->get('ap'));
+        $player->setPv($request->request->get('pv'));
+        $player->setMana($request->request->get('mana'));
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_player_show');
     }
 
     #[Route('/player/delete/{id}', name: 'app_player_delete')]
