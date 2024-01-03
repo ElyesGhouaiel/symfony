@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+</style>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>PV</th>
+        <th>Name</th>
+        <th>Mana</th>
+        <th>AP</th>
+        <th>AD</th>
+        <th>Action</th>
+    </tr>
+
+    {% for player in players %}
+        <tr>
+            <td>{{ player.id }}</td>
+            <td>{{ player.pv }}</td>
+            <td>{{ player.name }}</td>
+            <td>{{ player.mana }}</td>
+            <td>{{ player.ap }}</td>
+            <td>{{ player.ad }}</td>
+            <td>
+                <form action="http://127.0.0.1:8000/player/all" method="post">
+                    <label for="pv">PV:</label>
+                    <input type="text" id="pv" name="pv" value="{{ player.pv }}" ><br>
+
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" value="{{ player.name }}" ><br>
+
+                    <label for="mana">Mana:</label>
+                    <input type="text" id="mana" name="mana" value="{{ player.mana }}" ><br>
+
+                    <label for="ap">AP:</label>
+                    <input type="text" id="ap" name="ap" value="{{ player.ap }}" ><br>
+
+                    <label for="ad">AD:</label>
+                    <input type="text" id="ad" name="ad" value="{{ player.ad }}" ><br>
+
+                    <input type="button" value="Supprimer">
+                    <button type="submit">send</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
+
+
+
+
