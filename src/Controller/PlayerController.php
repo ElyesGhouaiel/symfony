@@ -56,14 +56,13 @@ class PlayerController extends AbstractController
     public function form(EntityManagerInterface $entityManager){
         return $this->render('player/createformulaire.html.twig');
     }
-
-    public function update_form(EntityManagerInterface $entityManager, int $id) : Response{
+    #[Route('/player/edit/{id}', name: 'app_player_edit_form', methods: ['GET'])]
+    public function update_form(EntityManagerInterface $entityManager, int $id){
         $player = $entityManager->getRepository(Player::class)->find($id);
-        return $this->redirectToRoute('app_player_show_all', ['players' => $players]);
+        return $this->render('player/index.html.twig', ['player' => $player]);
     }
-    #[Route('/player/edit/{id}', name: 'app_player_edit')]
-    public function update(Request $request,EntityManagerInterface $entityManager, int $id): Response
-    {
+    #[Route('/player/edit/{id}', name: 'app_player_edit',methods: ['POST'])]
+    public function update(Request $request,EntityManagerInterface $entityManager, int $id){
 
         $player = $entityManager->getRepository(Player::class)->find($id);
         $player->setName($request->request->get('name'));
@@ -73,8 +72,6 @@ class PlayerController extends AbstractController
         $player->setMana($request->request->get('mana'));
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_player_show_all', [
-            'id' => $player->getId()
-        ]);
+        return $this->redirectToRoute('app_player_show_all');
     }
 }
