@@ -46,7 +46,7 @@
             <td>{{ player.ap }}</td>
             <td>{{ player.ad }}</td>
             <td>
-                <form action="http://127.0.0.1:8000/player/all" method="post">
+                <form action="{{ path('app_player_edit', {id: player.id}) }}" method="post">
                     <label for="pv">PV:</label>
                     <input type="text" id="pv" name="pv" value="{{ player.pv }}" ><br>
 
