@@ -40,23 +40,34 @@ class PlayerController extends AbstractController
             'player' => $player,'players' => $players,
         ]);
     }
-    #[Route('/player/show/{id}', name: 'app_player_attack_form', methods: ['GET'])]
-    public function attack_form(EntityManagerInterface $entityManager, int $id){
-        $player = $entityManager->getRepository(Player::class)->find($id);
-        return $this->render('player/index2.html.twig', ['player' => $player]);
-    }
-    #[Route('/player/edit/{id}', name: 'app_player_attack',methods: ['POST'])]
+    #[Route('/player/attack/{id}', name: 'app_player_attack',methods: ['POST'])]
     public function attack(Request $request,EntityManagerInterface $entityManager, int $id){
 
+        $name_player=$request->request->get('nameplayer');
+        $choice_attack=$request->request->get('Attack');
+
         $player = $entityManager->getRepository(Player::class)->find($id);
-        $player->setName($request->request->get('name'));
-        $player->setAd($request->request->get('ad'));
-        $player->setAp($request->request->get('ap'));
-        $player->setPv($request->request->get('pv'));
-        $player->setMana($request->request->get('mana'));
+        $physical_attack = $player -> getAd();
+        $magical_attack = $player -> getAp();
+        $pv_player = $player ->getPv();
+        //$mana_attack = $player -> getMana();
+        $target_player = $entityManager->getRepository(Player::class)->find($name_player);
+
+        if($choice_attack === "Attaque_Physique"){
+            $target_player->setAd($target_player->getAd()-$physical_attack);
+            $target_player->setPv($target_player->getPv()-$physical_attack);
+        }elseif($choice_attack === "Attaque_Magique"){
+            $target_player->setAp($target_player->getAp()-$magical_attack);
+            $target_player->setPv($target_player->getPv()-$magical_attack);
+            $target_player->setMana($target_player->getMana()-70);
+        }
+
+        if($pv_player === 0){
+
+        }
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_player_show');
+        return $this->redirectToRoute('app_player_show_all');
     }
 
     #[Route('/player/delete/{id}', name: 'app_player_delete')]

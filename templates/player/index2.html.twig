@@ -19,26 +19,29 @@
 </tr>
 </table>
 
-<button type="submit">Attack</button>
 
 
-<label for="name>">Choose a player</label>
+    <form action="{{ path('app_player_attack', {id: player.id}) }}" method="post">
+    <label for="name>">Choose a player</label>
 
-<select name="nameplayer" id="name">
-    <option value="">--Please choose a player--</option>
-    {% for player in players %}
-    <option value="name">{{ player.name }}</option>
-    {% endfor %}
-</select>
+    <select name="nameplayer" id="nameplayer">
+        <option value="">--Please choose a player--</option>
+        {% for player in players %}
+        <option value="{{ player.id }}">{{ player.name }}</option>
+        {% endfor %}
+    </select>
 
 
-<label for="Attack>">Choose an attack</label>
+    <label for="Attack>">Choose an attack</label>
 
-<select name="pets" id="Attack">
-    <option value="">--Please choose an attack--</option>
-    <option value="AD50">AD50</option>
-    <option value="AP50">AP50</option>
-</select>
+    <select name="Attack" id="Attack">
+        <option value="">--Please choose an attack--</option>
+        <option value="Attaque_Physique">AD50</option>
+        <option value="Attaque_Magique">AP50</option>
+    </select>
+
+    <button type="submit">Attack</button>
+    </form>
 
 <style>
 table {
