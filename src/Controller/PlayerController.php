@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Player;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,7 +15,7 @@ class PlayerController extends AbstractController
     #[Route('/player/create', name: 'app_player_create')]
     public function save(Request $request,EntityManagerInterface $entityManager): Response
     {
-        $pv = $request->request->get('pv'); 
+        $pv = $request->request->get('pv');
         $name = $request->request->get('name');
         $mana = $request->request->get('mana');
         $ap = $request->request->get('ap');
@@ -103,5 +104,26 @@ class PlayerController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('app_player_show_all');
+    }
+    #[Route('/player/formulaire_v2', name: 'app_formulaire_v2')]
+    public function form_v2(Request $request,EntityManagerInterface $entityManager):Response{
+        $Player_v2=new Player();
+        $form=$this->createFormBuilder($Player_v2)
+            ->add('name')
+            ->add('pv')
+            ->add('mana')
+            ->add('ad')
+            ->add('ap')
+            ->add('submit', SubmitType::class,['label'=>'Create a new Player !'])
+            ->getForm();
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $Player_v2=$form->getData();
+
+            $entityManager->persist($Player_v2);
+            $entityManager->flush();
+        }return  $this->render('player/message.html.twig',
+            ['form'=>$form]);
+
     }
 }
