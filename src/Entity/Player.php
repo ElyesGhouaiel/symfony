@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PlayerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PlayerRepository::class)]
 class Player
@@ -17,8 +18,13 @@ class Player
     private ?int $pv = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
-
+    #[Assert\Length(
+        min: 2,
+        max: 8,
+        minMessage: 'Your first name must be at least {{ limit }} characters long',
+        maxMessage: 'Your first name cannot be longer than {{ limit }} characters',
+    )]
+    protected ?string $name;
     #[ORM\Column]
     private ?int $mana = null;
 
@@ -27,6 +33,10 @@ class Player
 
     #[ORM\Column]
     private ?int $ad = null;
+
+    #[ORM\ManyToOne(inversedBy: 'players')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
 
     public function getId(): ?int
     {
@@ -89,6 +99,18 @@ class Player
     public function setAd(int $ad): static
     {
         $this->ad = $ad;
+
+        return $this;
+    }
+
+    public function getOwner(): ?user
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?user $owner): static
+    {
+        $this->owner = $owner;
 
         return $this;
     }

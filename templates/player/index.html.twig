@@ -62,7 +62,7 @@
                     <label for="ad">AD:</label>
                     <input type="text" id="ad" name="ad" value="{{ player.ad }}" ><br>
 
-                    <input type="button" value="Supprimer">
+                        <a href="{{ path('app_player_delete', {id: player.id}) }}">Supprimer</a>
                     <button type="submit">modifier</button>
                 </form>
             </td>
